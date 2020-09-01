@@ -59,11 +59,20 @@ public class Main {
         reizigers = rdao.findAll();
         System.out.println(reizigers.size() + " reizigers\n");
 
+        //UPDATE REIZIGER
+        rdao.update(new Reiziger(4, "B", "van", "Haren", LocalDate.parse("2001-09-20")));
+        reizigers = rdao.findAll();
+        System.out.println(reizigers.size() + "\n");
+        for (Reiziger r : reizigers){
+            System.out.println(r);
+        }
+
         //VERWIJDER EEN SPECEFIEKE REIZIGER
         System.out.println("[TEST] Eerst " + reizigers.size() + " reizigers, na ReizigerDAO.delete() ");
         rdao.delete(sietske);
         reizigers = rdao.findAll();
         System.out.println(reizigers.size() + " reizigers\n");
+
 
         //VIND REIZIGER VIA ID
         System.out.println("Gevonden met ID: " + rdao.findById(1) + "\n");
