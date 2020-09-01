@@ -60,12 +60,13 @@ public class Main {
         System.out.println(reizigers.size() + " reizigers\n");
 
         //UPDATE REIZIGER
-        rdao.update(new Reiziger(4, "B", "van", "Haren", LocalDate.parse("2001-09-20")));
+        rdao.update(new Reiziger(5, "B", "van", "xd", LocalDate.parse("2001-09-20")));
         reizigers = rdao.findAll();
-        System.out.println(reizigers.size() + "\n");
+        System.out.println("[TEST] Geupdate lijst!: " + "\n");
         for (Reiziger r : reizigers){
             System.out.println(r);
         }
+        System.out.println("\n");
 
         //VERWIJDER EEN SPECEFIEKE REIZIGER
         System.out.println("[TEST] Eerst " + reizigers.size() + " reizigers, na ReizigerDAO.delete() ");
@@ -78,7 +79,7 @@ public class Main {
         System.out.println("Gevonden met ID: " + rdao.findById(1) + "\n");
 
         //VIND REIZIGER(S) VIA GEBOORTEDATUM
-        for(Reiziger r : rdao.findByGbDatum("2002-12-03")){
+        for(Reiziger r : rdao.findByGbDatum("2001-09-20")){
             System.out.println("Gevonden met geboortedatum: " + r);
         }
 

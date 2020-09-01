@@ -40,10 +40,6 @@ public class ReizigerDAOPsql implements ReizigerDAO{
 
                 return myStatement.execute();
             }
-            else{
-                System.out.println("Fill in the right primary key!");
-                break;
-            }
         }
 
         return false;
