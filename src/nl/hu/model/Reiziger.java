@@ -1,14 +1,21 @@
 package nl.hu.model;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Reiziger {
+
+    public static List<Reiziger> reizigerList = new ArrayList<Reiziger>();
 
     private int ID;
     private String voorletters;
     private String tussenvoegsel;
     private String achternaam;
-    private String geboorteDatum;
+    private LocalDate geboorteDatum;
 
-    public Reiziger(int ID, String voorletters, String tussenvoegsel, String achternaam, String geboorteDatum) {
+    public Reiziger(int ID, String voorletters, String tussenvoegsel, String achternaam, LocalDate geboorteDatum) {
         this.ID = ID;
         this.voorletters = voorletters;
         this.tussenvoegsel = tussenvoegsel;
@@ -48,11 +55,15 @@ public class Reiziger {
         this.achternaam = achternaam;
     }
 
-    public String getGeboorteDatum() {
+    public LocalDate getGeboorteDatum() {
         return geboorteDatum;
     }
 
-    public void setGeboorteDatum(String geboorteDatum) {
+    public void setGeboorteDatum(LocalDate geboorteDatum) {
         this.geboorteDatum = geboorteDatum;
+    }
+
+    public String toString(){
+        return voorletters + "." + achternaam;
     }
 }
