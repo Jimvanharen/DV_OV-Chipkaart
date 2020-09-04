@@ -7,13 +7,13 @@ import java.util.List;
 
 public class Reiziger {
 
-    public static List<Reiziger> reizigerList = new ArrayList<Reiziger>();
-
     private int ID;
     private String voorletters;
     private String tussenvoegsel;
     private String achternaam;
     private LocalDate geboorteDatum;
+    private AdresDAO adao;
+    private Adres adres;
 
     public Reiziger(int ID, String voorletters, String tussenvoegsel, String achternaam, LocalDate geboorteDatum) {
         this.ID = ID;
@@ -63,7 +63,17 @@ public class Reiziger {
         this.geboorteDatum = geboorteDatum;
     }
 
+    public Adres getAdres() {
+        return adres;
+    }
+
+    public void setAdres(Adres adres) {
+        this.adres = adres;
+    }
+
     public String toString(){
-        return voorletters + "." + achternaam;
+       // return String.format("Reiziger {#%s %s %s, geb. %s, Adres {%s %s}}", "3", getVoorletters(), getAchternaam(), getGeboorteDatum().toString(), getAdres().getPostcode());
+
+        return getID() + ". " + voorletters + "." + achternaam;
     }
 }

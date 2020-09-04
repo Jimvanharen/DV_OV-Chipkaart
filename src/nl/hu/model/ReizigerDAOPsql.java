@@ -75,7 +75,8 @@ public class ReizigerDAOPsql implements ReizigerDAO{
         ResultSet rs = preparedStatement.executeQuery();
 
         while(rs.next()){
-            reizigerList1.add(new Reiziger(rs.getInt("reiziger_id"), rs.getString("voorletters"), rs.getString("tussenvoegsel"), rs.getString("achternaam"), LocalDate.parse(rs.getString("geboortedatum"))));
+            reizigerList1.add(new Reiziger(rs.getInt("reiziger_id"), rs.getString("voorletters"), rs.getString("tussenvoegsel"),
+                    rs.getString("achternaam"), LocalDate.parse(rs.getString("geboortedatum"))));
         }
 
         return reizigerList1;

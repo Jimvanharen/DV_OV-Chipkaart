@@ -1,8 +1,6 @@
 package nl.hu;
 
-import nl.hu.model.Reiziger;
-import nl.hu.model.ReizigerDAO;
-import nl.hu.model.ReizigerDAOPsql;
+import nl.hu.model.*;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -15,12 +13,16 @@ public class Main {
     private static final String PASSWORD_DB = "karatekid2001";
 
     private ReizigerDAOPsql sql;
+    private AdresDAOPsql sql2;
     private Connection connection;
 
     public Main() throws SQLException {
         connection = DriverManager.getConnection(CONNECTION_URL, USERNAME_STD, PASSWORD_DB);
         sql = new ReizigerDAOPsql(connection);
+        sql2 = new AdresDAOPsql(connection, sql);
         testReizigerDAO(sql);
+        testAdresDAO(sql2);
+        closeConnection();
     }
 
     public static void main(String[] args) throws SQLException {
@@ -28,14 +30,8 @@ public class Main {
         new Main();
     }
 
-    private void tempTestFunc_001() throws SQLException {
-        Statement tempStatement = connection.createStatement();
-
-        ResultSet rs = tempStatement.executeQuery("SELECT reiziger_id FROM reiziger");
-
-        while(rs.next()){
-            System.out.println(rs.getString("reiziger_id"));
-        }
+    private void closeConnection() throws SQLException {
+        connection.close();
     }
 
     private static void testReizigerDAO(ReizigerDAO rdao) throws SQLException {
@@ -82,6 +78,45 @@ public class Main {
         for(Reiziger r : rdao.findByGbDatum("2001-09-20")){
             System.out.println("Gevonden met geboortedatum: " + r);
         }
+    }
 
+    private void testAdresDAO(AdresDAO adao) throws SQLException {
+        System.out.println("\n---------- Test ReizigerDAO -------------");
+
+        // Haal alle reizigers op uit de database
+        List<Adres> adresList = adao.findAll();
+        System.out.println("[Test] AdresDAO.findAll() geeft de volgende adressen:");
+        for (Adres a : adresList) {
+            System.out.println(a);
+        }
+        System.out.println();
+
+        adao.findByReiziger(new Reiziger(1, "B", "van", "xd", LocalDate.parse("2001-09-20")));
+        System.out.print("[Test] Eerst " + adresList.size() + " reizigers, na ReizigerDAO.save()");
+        Reiziger reiziger = new Reiziger(16, "L", "van", "Haren", LocalDate.parse("2005-05-02"));
+        sql.save(reiziger);
+        Adres adres = new Adres(16, "4125RD", "3", "Notaris appelpad", "Vianen", 16, null);
+        adao.save(adres);
+        adresList = adao.findAll();
+        System.out.println(adresList.size() + " adreslist grootte met lijst geupdate lijst: \n\n");
+        adresList = adao.findAll();
+        for(Adres a : adresList){
+            System.out.println(a);
+        }
+
+        adao.delete(adres);
+        sql.delete(reiziger);
+        adresList = adao.findAll();
+        System.out.println("\n Na delete is de grootte van de adresList " + adresList.size() + "\n");
+        for (Adres a : adresList){
+            System.out.println(a);
+        }
+
+        adao.update(new Adres(1, "3535JK", "4", "Coole straat", "Vianen", 1, null));
+        System.out.println("Na update is de lijst: \n");
+        adresList = adao.findAll();
+        for (Adres a : adresList){
+            System.out.println(a);
+        }
     }
 }
