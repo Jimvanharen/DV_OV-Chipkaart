@@ -22,8 +22,8 @@ public class Main {
         sql = new ReizigerDAOPsql(connection);
         sql2 = new AdresDAOPsql(connection, sql);
         sql3 = new OVChipkaartDAOPsql(connection);
-        testReizigerDAO(sql);
-        testAdresDAO(sql2);
+        //testReizigerDAO(sql);
+        //testAdresDAO(sql2);
         testOVChipkaartDAO(sql3);
         closeConnection();
     }
@@ -50,7 +50,7 @@ public class Main {
 
         // Maak een nieuwe reiziger aan en persisteer deze in de database
         String gbdatum = "1981-03-14";
-        Reiziger sietske = new Reiziger(77, "S", "", "Boers", LocalDate.parse(gbdatum));
+        Reiziger sietske = new Reiziger(77, "S", "", "Boers", LocalDate.parse(gbdatum), null);
 
         //VOEG EEN SPECEFIEKE REIZIGER TOE
         System.out.print("[Test] Eerst " + reizigers.size() + " reizigers, na ReizigerDAO.save() ");
@@ -59,7 +59,7 @@ public class Main {
         System.out.println(reizigers.size() + " reizigers\n");
 
         //UPDATE REIZIGER
-        rdao.update(new Reiziger(5, "B", "van", "xd", LocalDate.parse("2001-09-20")));
+        rdao.update(new Reiziger(5, "B", "van", "xd", LocalDate.parse("2001-09-20"), null));
         reizigers = rdao.findAll();
         System.out.println("[TEST] Geupdate lijst!: " + "\n");
         for (Reiziger r : reizigers){
@@ -75,12 +75,14 @@ public class Main {
 
 
         //VIND REIZIGER VIA ID
-        System.out.println("Gevonden met ID: " + rdao.findById(1) + "\n");
+        System.out.println("Gevonden met ID: " + rdao.findById(2) + "\n");
 
         //VIND REIZIGER(S) VIA GEBOORTEDATUM
-        for(Reiziger r : rdao.findByGbDatum("2001-09-20")){
+       /* for(Reiziger r : rdao.findByGbDatum("2001-09-20")){
             System.out.println("Gevonden met geboortedatum: " + r);
         }
+
+        */
     }
 
     private void testAdresDAO(AdresDAO adao) throws SQLException {
@@ -94,9 +96,9 @@ public class Main {
         }
         System.out.println();
 
-        adao.findByReiziger(new Reiziger(1, "B", "van", "xd", LocalDate.parse("2001-09-20")));
+        adao.findByReiziger(new Reiziger(1, "B", "van", "xd", LocalDate.parse("2001-09-20"), null));
         System.out.print("[Test] Eerst " + adresList.size() + " reizigers, na ReizigerDAO.save()");
-        Reiziger reiziger = new Reiziger(16, "L", "van", "Haren", LocalDate.parse("2005-05-02"));
+        Reiziger reiziger = new Reiziger(16, "L", "van", "Haren", LocalDate.parse("2005-05-02"), null);
         sql.save(reiziger);
         Adres adres = new Adres(16, "4125RD", "3", "Notaris appelpad", "Vianen", 16, null);
         adao.save(adres);
@@ -124,13 +126,37 @@ public class Main {
     }
 
     private void testOVChipkaartDAO(OVChipkaartDAO chipDAO) throws SQLException{
-        //chipDAO.save(new OVChipkaart(23890, Date.valueOf("2020-09-20"), 2, 66.66, 8));
-        //chipDAO.update(new OVChipkaart(23890, Date.valueOf("2020-09-20"), 1, 66.66, 8));
-        //chipDAO.delete(new OVChipkaart(23890, Date.valueOf("2020-09-20"), 2, 66.66, 8));
-        List<OVChipkaart> ovChipkaarts = chipDAO.findByReiziger(new Reiziger(2, null, null, null, null));
+        List<OVChipkaart> ovChipkaartList = chipDAO.findAll();
+        System.out.println("[TEST] GROOTTE VAN LIST VOOR SAVE: " + ovChipkaartList.size() + "\n\n");
+        chipDAO.save(new OVChipkaart(23890, Date.valueOf("2020-09-20"), 2, 66.66, 2, new Reiziger(2, null, null, null, null, null)));
+        ovChipkaartList = chipDAO.findAll();
+        System.out.println("[TEST] GROOTTE VAN LIST NA SAVE: " + ovChipkaartList.size() + "\n\n");
+        chipDAO.update(new OVChipkaart(35283, Date.valueOf("2020-09-20"), 1, 66.66, 2, new Reiziger( 2, null, null, null, null, null)));
+        System.out.println("GEUPDATE LIST: \n (reiziger met id 2 en kaartnummer 35283  gaat naar klasse 1)");
+        ovChipkaartList = chipDAO.findAll();
+        for (OVChipkaart ovChipkaart : ovChipkaartList){
+            System.out.println(ovChipkaart);
+        }
+        System.out.println("\n");
+        chipDAO.delete(new OVChipkaart(23890, Date.valueOf("2020-09-20"), 2, 66.66, 2, new Reiziger(2, null, null, null, null, null)));
+        ovChipkaartList = chipDAO.findAll();
+        System.out.println("GROOTTE VAN DE LIST NA DE DELETE " + ovChipkaartList.size());
+        List<OVChipkaart> ovChipkaarts = chipDAO.findByReiziger(new Reiziger(2, null, null, null, null, null));
 
+        System.out.println("\n");
+
+        System.out.println("[TEST] ALLE REIZIGERS GEVONDEN MET ID 2 \n");
         for (OVChipkaart os : ovChipkaarts){
             System.out.println(os);
         }
+        System.out.println("\n");
+        ovChipkaarts.clear();
+
+        System.out.println("[TEST] ALLLE OV CHIPKAARTEN GEVONDEN DIE AANWEZIG ZIJN");
+        ovChipkaarts = chipDAO.findAll();
+        for (OVChipkaart os : ovChipkaarts){
+            System.out.println(os);
+        }
+
     }
 }

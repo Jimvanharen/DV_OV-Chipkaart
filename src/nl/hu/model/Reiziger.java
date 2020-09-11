@@ -13,15 +13,15 @@ public class Reiziger {
     private String achternaam;
     private LocalDate geboorteDatum;
     private Adres adres;
+    private List<OVChipkaart> ovchip = new ArrayList<OVChipkaart>();
 
-    private List<OVChipkaart> ovchip;
-
-    public Reiziger(int ID, String voorletters, String tussenvoegsel, String achternaam, LocalDate geboorteDatum) {
+    public Reiziger(int ID, String voorletters, String tussenvoegsel, String achternaam, LocalDate geboorteDatum, OVChipkaart ovChipkaart) {
         this.ID = ID;
         this.voorletters = voorletters;
         this.tussenvoegsel = tussenvoegsel;
         this.achternaam = achternaam;
         this.geboorteDatum = geboorteDatum;
+        ovchip.add(ovChipkaart);
     }
 
     public int getID() {
@@ -72,10 +72,12 @@ public class Reiziger {
         this.adres = adres;
     }
 
-    public String stringMethod(){
-       // return String.format("Reiziger {#%s %s %s, geb. %s, Adres {%s %s}}", "3", getVoorletters(), getAchternaam(), getGeboorteDatum().toString(), getAdres().getPostcode());
+    public List<OVChipkaart> getOvchip() {
+        return ovchip;
+    }
 
-        return getID() + ". " + voorletters + "." + achternaam;
+    public void setOvchip(List<OVChipkaart> ovchip) {
+        this.ovchip = ovchip;
     }
 
     @Override
@@ -87,6 +89,7 @@ public class Reiziger {
                 ", achternaam='" + achternaam + '\'' +
                 ", geboorteDatum=" + geboorteDatum +
                 ", adres=" + adres +
+                ", heeft " + ovchip.size() + " ov_chipkaarten" +
                 '}';
     }
 }

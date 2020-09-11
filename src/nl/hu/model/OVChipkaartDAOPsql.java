@@ -1,9 +1,7 @@
 package nl.hu.model;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +23,24 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO{
 
         while (rs.next()){
             ovChipkaarts.add(new OVChipkaart(rs.getInt("kaart_nummer"), rs.getDate("geldig_tot"), rs.getInt("klasse"),
-                    rs.getDouble("saldo"), rs.getInt("reiziger_id")));
+                    rs.getDouble("saldo"), rs.getInt("reiziger_id"), reiziger));
         }
+        return ovChipkaarts;
+    }
+
+    @Override
+    public List<OVChipkaart> findAll() throws SQLException {
+        List<OVChipkaart> ovChipkaarts = new ArrayList<OVChipkaart>();
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM ov_chipkaart INNER JOIN reiziger ON ov_chipkaart.reiziger_id = reiziger.reiziger_id");
+
+        while (resultSet.next()){
+            ovChipkaarts.add(new OVChipkaart(resultSet.getInt("kaart_nummer"), resultSet.getDate("geldig_tot"), resultSet.getInt("klasse"),
+                    resultSet.getDouble("saldo"), resultSet.getInt("reiziger_id"), new Reiziger(resultSet.getInt("reiziger_id"),
+                    resultSet.getString("voorletters"), resultSet.getString("tussenvoegsel"), resultSet.getString("achternaam"),
+                    LocalDate.parse(resultSet.getString("geboortedatum")), null)));
+        }
+
         return ovChipkaarts;
     }
 

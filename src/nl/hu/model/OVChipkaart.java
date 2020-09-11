@@ -10,12 +10,13 @@ public class OVChipkaart {
     private int reiziger_id;
     private Reiziger reiziger;
 
-    public OVChipkaart(int kaart_nummer, Date geldig_tot, int klasse, double saldo, int reiziger_id) {
+    public OVChipkaart(int kaart_nummer, Date geldig_tot, int klasse, double saldo, int reiziger_id, Reiziger reiziger) {
         this.kaart_nummer = kaart_nummer;
         this.geldig_tot = geldig_tot;
         this.klasse = klasse;
         this.saldo = saldo;
         this.reiziger_id = reiziger_id;
+        this.reiziger = reiziger;
     }
 
     public int getKaart_nummer() {

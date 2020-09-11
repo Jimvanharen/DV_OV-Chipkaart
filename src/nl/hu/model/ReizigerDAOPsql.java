@@ -68,6 +68,8 @@ public class ReizigerDAOPsql implements ReizigerDAO{
     @Override
     public List<Reiziger> findByGbDatum(String datum) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM reiziger WHERE geboortedatum=?");
+        //Statement statement = connection.createStatement();
+        //statement.executeQuery("SELECT * FROM reiziger AS r INNER JOIN ov_chipkaart AS o ON r.reiziger_id=o.reiziger_id");
         List<Reiziger> reizigerList = findAll();
         List<Reiziger> reizigerList1 = new ArrayList<>();
         preparedStatement.setDate(1, Date.valueOf(LocalDate.parse(datum)));
@@ -76,7 +78,8 @@ public class ReizigerDAOPsql implements ReizigerDAO{
 
         while(rs.next()){
             reizigerList1.add(new Reiziger(rs.getInt("reiziger_id"), rs.getString("voorletters"), rs.getString("tussenvoegsel"),
-                    rs.getString("achternaam"), LocalDate.parse(rs.getString("geboortedatum"))));
+                    rs.getString("achternaam"), LocalDate.parse(rs.getString("geboortedatum")), new OVChipkaart(rs.getInt("kaart_nummer"),
+                    rs.getDate("geldig_tot"), rs.getInt("klasse"), rs.getDouble("saldo"), rs.getInt("reiziger_id"), null)));
         }
 
         return reizigerList1;
@@ -86,12 +89,14 @@ public class ReizigerDAOPsql implements ReizigerDAO{
     public List<Reiziger> findAll() throws SQLException{
         List<Reiziger> reizigerList = new ArrayList<Reiziger>();
         Statement myStatement = connection.createStatement();
-        String query = "SELECT * FROM reiziger";
+        String query = "SELECT * FROM reiziger AS r INNER JOIN ov_chipkaart AS o ON r.reiziger_id=o.reiziger_id";
 
         ResultSet rs = myStatement.executeQuery(query);
 
         while(rs.next()){
-            Reiziger reiziger = new Reiziger(rs.getInt("reiziger_id"), rs.getString("voorletters"), rs.getString("tussenvoegsel"), rs.getString("achternaam"), LocalDate.parse(rs.getString("geboortedatum")));
+            Reiziger reiziger = new Reiziger(rs.getInt("reiziger_id"), rs.getString("voorletters"), rs.getString("tussenvoegsel"),
+                    rs.getString("achternaam"), LocalDate.parse(rs.getString("geboortedatum")), new OVChipkaart(rs.getInt("kaart_nummer"),
+                    rs.getDate("geldig_tot"), rs.getInt("klasse"), rs.getDouble("saldo"), rs.getInt("reiziger_id"), null));
             reizigerList.add(reiziger);
         }
 

@@ -8,4 +8,5 @@ public interface OVChipkaartDAO {
     public abstract boolean save(OVChipkaart ovChipkaart) throws SQLException;
     public abstract boolean update(OVChipkaart ovChipkaart) throws SQLException;
     public abstract boolean delete(OVChipkaart ovChipkaart) throws SQLException;
+    public abstract List<OVChipkaart> findAll() throws SQLException;
 }
