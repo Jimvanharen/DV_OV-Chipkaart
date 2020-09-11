@@ -76,7 +76,20 @@ public class Adres {
         this.id = id;
     }
 
-    public String toString(){
+    public String stringMethod(){
         return String.format("Reiziger: " + getId() + " Achternaam: " + getReiziger().getAchternaam()+ " Met gb: " + getReiziger().getGeboorteDatum().toString() + " En postcode: " + getPostcode());
+    }
+
+    @Override
+    public String toString() {
+        return "Adres{" +
+                "id=" + id +
+                ", postcode='" + postcode + '\'' +
+                ", huisnummer='" + huisnummer + '\'' +
+                ", straat='" + straat + '\'' +
+                ", woonplaats='" + woonplaats + '\'' +
+                ", reiziger_id=" + reiziger_id +
+                ", reiziger=" + reiziger +
+                '}';
     }
 }

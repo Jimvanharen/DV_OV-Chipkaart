@@ -12,8 +12,9 @@ public class Reiziger {
     private String tussenvoegsel;
     private String achternaam;
     private LocalDate geboorteDatum;
-    private AdresDAO adao;
     private Adres adres;
+
+    private List<OVChipkaart> ovchip;
 
     public Reiziger(int ID, String voorletters, String tussenvoegsel, String achternaam, LocalDate geboorteDatum) {
         this.ID = ID;
@@ -71,9 +72,21 @@ public class Reiziger {
         this.adres = adres;
     }
 
-    public String toString(){
+    public String stringMethod(){
        // return String.format("Reiziger {#%s %s %s, geb. %s, Adres {%s %s}}", "3", getVoorletters(), getAchternaam(), getGeboorteDatum().toString(), getAdres().getPostcode());
 
         return getID() + ". " + voorletters + "." + achternaam;
+    }
+
+    @Override
+    public String toString() {
+        return "Reiziger{" +
+                "ID=" + ID +
+                ", voorletters='" + voorletters + '\'' +
+                ", tussenvoegsel='" + tussenvoegsel + '\'' +
+                ", achternaam='" + achternaam + '\'' +
+                ", geboorteDatum=" + geboorteDatum +
+                ", adres=" + adres +
+                '}';
     }
 }

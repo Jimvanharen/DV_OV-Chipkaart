@@ -14,14 +14,17 @@ public class Main {
 
     private ReizigerDAOPsql sql;
     private AdresDAOPsql sql2;
+    private OVChipkaartDAOPsql sql3;
     private Connection connection;
 
     public Main() throws SQLException {
         connection = DriverManager.getConnection(CONNECTION_URL, USERNAME_STD, PASSWORD_DB);
         sql = new ReizigerDAOPsql(connection);
         sql2 = new AdresDAOPsql(connection, sql);
+        sql3 = new OVChipkaartDAOPsql(connection);
         testReizigerDAO(sql);
         testAdresDAO(sql2);
+        testOVChipkaartDAO(sql3);
         closeConnection();
     }
 
@@ -117,6 +120,17 @@ public class Main {
         adresList = adao.findAll();
         for (Adres a : adresList){
             System.out.println(a);
+        }
+    }
+
+    private void testOVChipkaartDAO(OVChipkaartDAO chipDAO) throws SQLException{
+        //chipDAO.save(new OVChipkaart(23890, Date.valueOf("2020-09-20"), 2, 66.66, 8));
+        //chipDAO.update(new OVChipkaart(23890, Date.valueOf("2020-09-20"), 1, 66.66, 8));
+        //chipDAO.delete(new OVChipkaart(23890, Date.valueOf("2020-09-20"), 2, 66.66, 8));
+        List<OVChipkaart> ovChipkaarts = chipDAO.findByReiziger(new Reiziger(2, null, null, null, null));
+
+        for (OVChipkaart os : ovChipkaarts){
+            System.out.println(os);
         }
     }
 }
